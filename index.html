@@ -37,9 +37,6 @@
             <p></p>
             <div class="btn-group-vertical btn-group-lg">
               <button type="button" class="btn btn-outline-secondary">
-                Austin
-              </button>
-              <button type="button" class="btn btn-outline-secondary">
                 Chicago
               </button>
               <button type="button" class="btn btn-outline-secondary">
@@ -50,6 +47,9 @@
               </button>
               <button type="button" class="btn btn-outline-secondary">
                 San Francisco
+              </button>
+              <button type="button" class="btn btn-outline-secondary">
+                Austin
               </button>
               <button type="button" class="btn btn-outline-secondary">
                 Seattle
@@ -100,7 +100,7 @@
                             <div class="card text-white bg-primary m-2" style="max-width: 9rem;">
                                 <div class="card-header">Date</div>
                                 <div class="card-body">
-                                  <p class="card-text">this will show temp and humidity</p>
+                                  <p class="card-text" id="humidity">this will show temp and humidity</p>
                                 </div>
                             </div>
                             </div>
@@ -111,6 +111,8 @@
         </div>
       </div>
     </div>
+
+
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -127,5 +129,62 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      
+    var apiKey = "6fe106a572843b342a52a60723960a72";
+    var city = "Austin";
+
+var weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&cnt=5&units=imperial&appid=" + apiKey;
+var forecastURL = "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&cnt=5&appid=" + apiKey;
+
+$.ajax({
+    url: weatherURL,
+    method: 'GET'
+})
+    .done(function (response) {
+        console.log(response);
+        console.log(response.main.humidity);
+        console.log(response.main.temp);
+        console.log(response.coord.lon);
+        console.log(response.coord.lat);
+
+        var uviURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + response.coord.lat + "&lon=" + response.coord.lat;
+        $.ajax({
+            url: uviURL,
+            method: 'GET'
+        })
+            .done(function (response) {
+                console.log(response);
+                console.log(response.value)
+            });
+        console.log(response.wind.speed);
+    });
+
+
+
+  $("humidity").text(response.main.humidity);
+      $(".temp").text(response.main.temp);
+      $(".lon").text(response.coord.lon);
+      $(".lat").text(response.coord.lat);
+      $(".lat").text(response.value);
+      $(".lat").text(response.wind.speed);
+      // Create CODE HERE to calculate the temperature (converted from Kelvin)
+      var temp = (response.main.temp - 273.15) * 1.80 + 32;
+      // Hint: To convert from Kelvin to Fahrenheit: F = (K - 273.15) * 1.80 + 32
+      // Create CODE HERE to dump the temperature content into HTML
+      $(".temp").text(temp);
+
+
+
+// ---------------------------------------------------------
+
+  </script>
+
+
+
+
   </body>
 </html>
